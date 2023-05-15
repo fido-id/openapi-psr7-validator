@@ -81,7 +81,11 @@ class Properties extends BaseKeyword
                 continue;
             }
 
-            $schemaValidator->validate($data[$propName], $propSchema, $this->dataBreadCrumb->addCrumb($propName));
+           try {
+                $schemaValidator->validate($data[$propName], $propSchema, $this->dataBreadCrumb->addCrumb($propName));
+            } catch (\Throwable $t) {
+                throw new \Exception($t->getMessage() . '->' . $propName, 0, $t);
+            }
         }
 
         // Validate the rest against "additionalProperties"
